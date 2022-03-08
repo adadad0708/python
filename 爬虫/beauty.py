@@ -13,8 +13,44 @@ def request_get(url, ret_type="text", timeout=5, encoding="GBK"):
         return res.content
 
 def main():
-    urls = [f"http://www.netbian.com/mei/index_{i}.htm" for i in range(2, 201)]
+    # urls = [f"http://www.netbian.com/mei/index_{i}.htm" for i in range(2, 201)]
     url = "http://www.netbian.com/mei/index.htm"
-    print(request_get(url))
+    text = request_get ( url )
+    format ( text )
+    # urls.insert(0, url)
+    # for url in urls:
+    #     print("抓取列表页地址为：", url)
+    #     text = request_get(url)
+    #     format(text)
+
+def format(text):
+    origin_text = split_str(text, '<div class="list">', '<div class="page">')
+    pattern = re.compile('href="(.*?)"')
+    hrefs = pattern.findall(origin_text)
+    hrefs = [i for i in hrefs if i.find("desk") > 0]
+    for href in hrefs:
+        url = f"http://www.netbian.com{href}"
+        print(f"正在下载：{url}")
+        text = request_get(url)
+        format_detail(text)
+
+
+def split_str(text, s_html, e_html):
+    start = text.find ( s_html ) + len ( e_html )
+    end = text.find ( e_html )
+    origin_text = text[start:end]
+
+    return origin_text
+def format_detail(text):
+    origin_text = split_str(text, '<div class="pic">', '<div class="pic-down">')
+    pattern = re.compile('src="(.*?)"')
+    image_src = pattern.search(origin_text).group(1)
+    # 保存图片
+    save_image(image_src)
+
+def save_image(image_src):
+    content = request_get(image_src, "image")
+    with open(f"{str(time.time())}.jpg", "wb") as f:
+        f.write(content)
 if __name__ == '__main__':
     main()
