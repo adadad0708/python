@@ -14,12 +14,10 @@
 import os
 
 def mkd():
+    path = "E:\\女装新品\\2022\\眼经\\wooden\\" #文件存哪里
+    for i in range(2, 200): #创建一个文件并循环20-1次
 
-    path = "E:\\新品杂货\\2022\\022030\\" #文件存哪里
-
-    for i in range(2, 20): #创建一个文件并循环20-1次
-
-        k = "%03d" % i # 两位数,不足向前取零
+        k = "%09d" % i # 两位数,不足向前取零
 
         file_name = path + str(k) #给文件命名 路径+ 文件标号（以标号为名字）
 
@@ -27,9 +25,9 @@ def mkd():
 
         mkpath = file_name + '/'#路径下钻
 
-        wenben = open(mkpath + str(k) +".txt", "w") #在上面建的那个文件里边再建一个TXT文件
-
-        wenben.write("THIS IS " + k + " TEXT")#给TXT里边写点内容
+        # wenben = open(mkpath + str(k) +".txt", "w") #在上面建的那个文件里边再建一个TXT文件
+        #
+        # wenben.write("THIS IS " + k + " TEXT")#给TXT里边写点内容
 
         print(file_name + "创建成功")
 
